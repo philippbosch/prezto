@@ -11,3 +11,98 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+
+
+# Path
+export PATH="$(ruby -rubygems -e "puts Gem.bindir"):./node_modules/.bin:/usr/local/share/npm/bin:/Applications/Postgres.app/Contents/Versions/latest/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/go/libexec/bin:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/bin:$HOME/bin:$PATH"
+
+
+# Aliases
+if [ -e $HOME/.aliases ] ; then
+    source $HOME/.aliases
+fi
+
+
+# tmux plugin
+ZSH_TMUX_ITERM2=true
+
+
+# Editor
+if [[ ! -z "`command -v atom`" ]] ; then
+    export EDITOR="`which atom` -w"
+elif [[ ! -z "`command -v subl`" ]] ; then
+    export EDITOR="`which subl` -w"
+elif [[ ! -z "`command -v choc_wait`" ]] ; then
+    export EDITOR="`which choc_wait`"
+elif [[ ! -z "`command -v mate_wait`" ]] ; then
+    export EDITOR="`which mate_wait`"
+elif [[ ! -z "`command -v joe`" ]] ; then
+    export EDITOR="`which joe`"
+elif [[ ! -z "`command -v nano`" ]] ; then
+    export EDITOR="`which nano`"
+fi
+
+export LESSEDIT="$EDITOR %f"
+
+
+# OSX-specific aliases
+if [ ! "$SSH_TTY" ] && [[ "$OSTYPE" =~ "darwin" ]] ; then
+    alias ss="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
+    alias flush="dscacheutil -flushcache"
+    alias httpdump="sudo tcpdump -i en0 -n -s 0 -w - | grep --color=never -a -o -E \"Host\: .*|GET \/.*\""
+    alias imageoptim="open -a /opt/homebrew-cask/Caskroom/imageoptim/latest/ImageOptim.app"
+fi
+
+
+# virtualenv
+# export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+
+# autoenv (https://github.com/kennethreitz/autoenv)
+if [[ -e /usr/local/bin/activate.sh ]] ; then
+    source /usr/local/bin/activate.sh
+else
+    if [[ -e /usr/local/opt/autoenv/activate.sh ]] ; then
+        source /usr/local/opt/autoenv/activate.sh
+    fi
+fi
+
+
+# custom cd
+# function cd() {
+#     emulate -LR zsh
+#     if builtin cd "$@"
+#     then
+#         l
+#         autoenv_init
+#         return 0
+#     else
+#         return $?
+#     fi
+# }
+
+
+# https://github.com/ddollar/foreman/issues/124#issuecomment-3802377
+export PYTHONUNBUFFERED=True
+
+
+# Misc
+export PIP_LOG_FILE="/tmp/pip-log.txt"
+export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+export JAVA_HOME="$(/usr/libexec/java_home)"
+export ANDROID_SDK_ROOT=/usr/local/opt/android-sdk
+export AWS_CREDENTIAL_FILE=$HOME/.aws-credentials-master
+export AWS_IAM_HOME="/usr/local/opt/aws-iam-tools/libexec"
+export PEBBLE_ID="00:18:2F:CE:B7:FB"
+
+unsetopt noclobber
+
+eval "$(rbenv init -)"
+
+# The next line updates PATH for the Google Cloud SDK.
+source '/Users/pb/google-cloud-sdk/path.zsh.inc'
+
+source /Users/pb/.iterm2_shell_integration.zsh
+
+export NVM_DIR="/usr/local/opt/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
